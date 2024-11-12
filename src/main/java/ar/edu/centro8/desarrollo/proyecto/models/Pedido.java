@@ -1,12 +1,21 @@
 package ar.edu.centro8.desarrollo.proyecto.models;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -20,6 +29,7 @@ import lombok.Setter;
 public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id_pedido", nullable = false)
     private Long id;
 
     @Column(name="fecha", nullable = false)
@@ -39,9 +49,105 @@ public class Pedido {
     @Column(name="notas", nullable = true)
     private String notas;
 
-    public Pedido(int cantidad, String estado, String notas) {
+    //RELACION PEDIDO - CLIENTE
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(name = "id_cliente")
+    private Cliente cliente;
+
+    //RELACION PEDIDO - FACTURA (BIDIRECCIONAL FK - PK)
+    @OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)
+    private Factura factura;
+
+    //RELACION PEDIDO - PLATO
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Plato> platos;
+
+    public Pedido(int cantidad, String estado, String notas, List<Plato> platos){
         this.cantidad = cantidad;
         this.estado = estado;
         this.notas = notas;
-    }       
+        this.platos = platos;
+    }
+
+    //AGREGADO 
+    //PEDIDO-CLIENTE
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    //PEDIDO - PLATO
+    public Plato agregarPlato(Plato plato) {
+        this.platos.add(plato);
+        return plato;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
+        result = prime * result + cantidad;
+        result = prime * result + ((estado == null) ? 0 : estado.hashCode());
+        result = prime * result + ((notas == null) ? 0 : notas.hashCode());
+        result = prime * result + ((cliente == null) ? 0 : cliente.hashCode());
+        result = prime * result + ((factura == null) ? 0 : factura.hashCode());
+        result = prime * result + ((platos == null) ? 0 : platos.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Pedido other = (Pedido) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (fecha == null) {
+            if (other.fecha != null)
+                return false;
+        } else if (!fecha.equals(other.fecha))
+            return false;
+        if (cantidad != other.cantidad)
+            return false;
+        if (estado == null) {
+            if (other.estado != null)
+                return false;
+        } else if (!estado.equals(other.estado))
+            return false;
+        if (notas == null) {
+            if (other.notas != null)
+                return false;
+        } else if (!notas.equals(other.notas))
+            return false;
+        if (cliente == null) {
+            if (other.cliente != null)
+                return false;
+        } else if (!cliente.equals(other.cliente))
+            return false;
+        if (factura == null) {
+            if (other.factura != null)
+                return false;
+        } else if (!factura.equals(other.factura))
+            return false;
+        if (platos == null) {
+            if (other.platos != null)
+                return false;
+        } else if (!platos.equals(other.platos))
+            return false;
+        return true;
+    }
+    
+    //implementacion de equals y hashcode
+       
+        
 }
