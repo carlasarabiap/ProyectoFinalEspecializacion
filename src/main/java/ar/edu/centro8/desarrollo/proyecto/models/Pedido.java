@@ -1,10 +1,8 @@
 package ar.edu.centro8.desarrollo.proyecto.models;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -14,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
@@ -52,24 +49,13 @@ public class Pedido {
     //RELACION PEDIDO - CLIENTE
     @ManyToOne
     @JsonBackReference
-    @JoinColumn(name = "id_cliente")
+    @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;
 
     //RELACION PEDIDO - FACTURA (BIDIRECCIONAL FK - PK)
     @OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)
     private Factura factura;
 
-    //RELACION PEDIDO - PLATO
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Plato> platos;
-
-    public Pedido(int cantidad, String estado, String notas, List<Plato> platos){
-        this.cantidad = cantidad;
-        this.estado = estado;
-        this.notas = notas;
-        this.platos = platos;
-    }
 
     //AGREGADO 
     //PEDIDO-CLIENTE
@@ -77,11 +63,6 @@ public class Pedido {
         this.cliente = cliente;
     }
 
-    //PEDIDO - PLATO
-    public Plato agregarPlato(Plato plato) {
-        this.platos.add(plato);
-        return plato;
-    }
 
     @Override
     public int hashCode() {
@@ -94,7 +75,6 @@ public class Pedido {
         result = prime * result + ((notas == null) ? 0 : notas.hashCode());
         result = prime * result + ((cliente == null) ? 0 : cliente.hashCode());
         result = prime * result + ((factura == null) ? 0 : factura.hashCode());
-        result = prime * result + ((platos == null) ? 0 : platos.hashCode());
         return result;
     }
 
@@ -139,15 +119,8 @@ public class Pedido {
                 return false;
         } else if (!factura.equals(other.factura))
             return false;
-        if (platos == null) {
-            if (other.platos != null)
-                return false;
-        } else if (!platos.equals(other.platos))
-            return false;
         return true;
     }
-    
-    //implementacion de equals y hashcode
        
         
 }

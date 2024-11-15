@@ -46,7 +46,6 @@ public class Cliente {
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    // private HashSet<Pedido> pedidos;
     private List<Pedido> pedidos;
 
     public Cliente(String nombre, String email, int telefono, String direccion, int edad,

@@ -16,50 +16,33 @@ import lombok.Setter;
 
 @Entity
 @Getter @Setter
-@Table(name="platos")
+@Table(name="plato")
 @NoArgsConstructor
 public class Plato {
-@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id_plato", nullable = false)
     private Long id;
 
-    @Column(name="nombre", nullable = false)
-    private String nombre;
-    
-    @Column(name="descripcion", nullable = false)
-    private String descripcion;
-    
-    @Column(name="precio", nullable = false)
-    private Double precio;
-    
     @Column(name="cantidad", nullable = false)
     private int cantidad;
 
-    @Column(name="categoria", nullable = false)
-    private String categoria;
     
-    @Column(name="imagenUrl", nullable = false)
-    private String imagenUrl;
-
-    //RELACION PEDIDO - PLATO
+    //RELACION PLATO - MENU
     @ManyToOne
     @JsonBackReference
-    @JoinColumn(name = "id_pedido")
-    private Pedido pedido;
+    @JoinColumn(name = "id_menu", nullable = false)
+    private Menu menu;
 
-    public Plato(String nombre, String descripcion, Double precio, int cantidad, String categoria, String imagenUrl, Pedido pedido) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.precio = precio;
+
+    public Plato(int cantidad, Menu menu) {
         this.cantidad = cantidad;
-        this.categoria = categoria;
-        this.imagenUrl = imagenUrl;
-        this.pedido = pedido;
+        this.menu = menu;
     }
 
-    //AGREGADO
-    public void setPedido(Pedido pedido) {
-        this.pedido = pedido;
+    //AGREGADO 
+    public void setMenu(Menu menu) {
+        this.menu = menu;
     }
 
     @Override
@@ -67,13 +50,8 @@ public class Plato {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
-        result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
-        result = prime * result + ((precio == null) ? 0 : precio.hashCode());
         result = prime * result + cantidad;
-        result = prime * result + ((categoria == null) ? 0 : categoria.hashCode());
-        result = prime * result + ((imagenUrl == null) ? 0 : imagenUrl.hashCode());
-        result = prime * result + ((pedido == null) ? 0 : pedido.hashCode());
+        result = prime * result + ((menu == null) ? 0 : menu.hashCode());
         return result;
     }
 
@@ -91,40 +69,18 @@ public class Plato {
                 return false;
         } else if (!id.equals(other.id))
             return false;
-        if (nombre == null) {
-            if (other.nombre != null)
-                return false;
-        } else if (!nombre.equals(other.nombre))
-            return false;
-        if (descripcion == null) {
-            if (other.descripcion != null)
-                return false;
-        } else if (!descripcion.equals(other.descripcion))
-            return false;
-        if (precio == null) {
-            if (other.precio != null)
-                return false;
-        } else if (!precio.equals(other.precio))
-            return false;
         if (cantidad != other.cantidad)
             return false;
-        if (categoria == null) {
-            if (other.categoria != null)
+        if (menu == null) {
+            if (other.menu != null)
                 return false;
-        } else if (!categoria.equals(other.categoria))
-            return false;
-        if (imagenUrl == null) {
-            if (other.imagenUrl != null)
-                return false;
-        } else if (!imagenUrl.equals(other.imagenUrl))
-            return false;
-        if (pedido == null) {
-            if (other.pedido != null)
-                return false;
-        } else if (!pedido.equals(other.pedido))
+        } else if (!menu.equals(other.menu))
             return false;
         return true;
     }
-    
-    
+
+
+
+       
+
 }
