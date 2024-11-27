@@ -1,6 +1,6 @@
 package ar.edu.centro8.desarrollo.proyecto.controllers;
 
-//import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,38 +14,47 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.centro8.desarrollo.proyecto.models.Pedido;
-import ar.edu.centro8.desarrollo.proyecto.services.PedidoService;
+import ar.edu.centro8.desarrollo.proyecto.repositories.PedidoRepository;
 
 @RestController
-@RequestMapping("/api/pedidos")
+@RequestMapping("/api")
 public class PedidoController {
 
     @Autowired
-    private PedidoService pediServi;
-    
-        @GetMapping
-        public List<Pedido> getAllPedidos() {
-            return pediServi.obtenerPedidos();
-        }
-    
-        @GetMapping("/{id}")
-        public Pedido getPedidoById(@PathVariable Long id) {
-            return pediServi.traerPedido(id);
-        }
-    
-        @PostMapping
-        public void createPedido(@RequestBody Pedido pedido) {
-            pediServi.guardarPedido(pedido);
-        }
-    
-        @PutMapping("/{id}")
-        public void updatePedido(@PathVariable Long id, @RequestBody Pedido pedido) {
-             pediServi.editarPedido(id, pedido.getCantidad(), pedido.getEstado(), pedido.getNotas());
-        }
-    
-        @DeleteMapping("/{id}")
-        public void deletePedido(@PathVariable Long id) {
-            pediServi.eliminarPedido(id);
-        }
+    private PedidoRepository peRepo;
+
+    @GetMapping("/pedidos/mostrar")
+    public List<Pedido> mostrarPedidos(){
+        return peRepo.findAll();
     }
-    
+
+    @PostMapping("/pedidos/cargar")
+    public String cargarPedido(@RequestBody Pedido pe){
+        peRepo.save(pe);
+        return "Pedido cargado correctamente";
+    }
+
+    @GetMapping("/pedidos/mostrar/{id}")
+    public Pedido mostrarUnPedido(@PathVariable Long id){
+        return peRepo.findById(id).get();
+    }
+
+    @DeleteMapping("/pedidos/eliminar/{id}")
+    public String eliminarUnPedido(@PathVariable Long id){
+        peRepo.deleteById(id);
+        return "Pedido eliminado correctamente";
+    }
+
+    @PutMapping("/pedidos/editar/{id}")
+    public String actualizarPedido(@PathVariable Long id, @RequestBody Pedido pe){
+        Pedido peam = peRepo.findById(id).get();
+        peam.setCantidad(pe.getCantidad());
+        peam.setEstado(pe.getEstado());
+        peam.setNotas(pe.getNotas());
+        // Asigna automáticamente la fecha y hora actual
+        peam.setFecha(LocalDateTime.now());
+        peRepo.save(peam);
+        return "Datos actualizados correctamente";
+    }
+}
+

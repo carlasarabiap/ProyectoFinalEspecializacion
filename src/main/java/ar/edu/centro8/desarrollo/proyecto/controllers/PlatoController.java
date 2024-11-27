@@ -13,38 +13,49 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.centro8.desarrollo.proyecto.models.Plato;
-import ar.edu.centro8.desarrollo.proyecto.services.PlatoService;
+import ar.edu.centro8.desarrollo.proyecto.repositories.PlatoRepository;
 
 @RestController
-@RequestMapping("/api/platos")
+@RequestMapping("/api")
 public class PlatoController {
 
-
     @Autowired
-    private PlatoService plaServi;
-    
-        @GetMapping
-        public List<Plato> getAllPlatos() {
-            return plaServi.obtenerPlatos();
-        }
-    
-        @GetMapping("/{id}")
-        public Plato getPlatoById(@PathVariable Long id) {
-            return plaServi.traerPlato(id);
-        }
-    
-        @PostMapping
-        public void createPlato(@RequestBody Plato plato) {
-            plaServi.guardarPlato(plato);
-        }
-    
-        @PutMapping("/{id}")
-        public void updatePlato(@PathVariable Long id, @RequestBody Plato plato) {
-             plaServi.editarPlato(id, plato.getCantidad());
-        }
-    
-        @DeleteMapping("/{id}")
-        public void deletePlato(@PathVariable Long id) {
-            plaServi.eliminarPlato(id);
-        }
+    private PlatoRepository plaRepo;
+
+    @GetMapping("/platos/mostrar")
+    public List<Plato> mostrarPlatos(){
+        return plaRepo.findAll();
     }
+
+    @PostMapping("/platos/agregar")
+    public String agregarPlato(@RequestBody Plato pla){
+        plaRepo.save(pla);
+        return "Plato agregado correctamente";
+    }
+
+    @GetMapping("/platos/mostrar/{id}")
+    public Plato mostrarUnPlato(@PathVariable Long id){
+        return plaRepo.findById(id).get();
+    }
+
+    @DeleteMapping("/platos/eliminar/{id}")
+    public String eliminarUnPlato(@PathVariable Long id){
+        plaRepo.deleteById(id);
+        return "Plato eliminado correctamente";
+    }
+
+    @PutMapping("/platos/editar/{id}")
+    public String actualizarPlato(@PathVariable Long id, @RequestBody Plato p){
+        Plato pam = plaRepo.findById(id).get();
+        pam.setNombre(p.getNombre());
+        pam.setDescripcion(p.getDescripcion());
+        pam.setPrecio(p.getPrecio());
+        pam.setCantidad(p.getCantidad());
+        pam.setCategoria(p.getCategoria());
+        pam.setImagenUrl(p.getImagenUrl());
+        plaRepo.save(pam);
+        return "Datos actualizados correctamente";
+    }
+}
+
+
