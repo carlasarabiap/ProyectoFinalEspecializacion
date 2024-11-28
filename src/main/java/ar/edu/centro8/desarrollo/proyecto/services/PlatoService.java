@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ar.edu.centro8.desarrollo.proyecto.models.Pedido;
 import ar.edu.centro8.desarrollo.proyecto.models.Plato;
+import ar.edu.centro8.desarrollo.proyecto.repositories.PedidoRepository;
 import ar.edu.centro8.desarrollo.proyecto.repositories.PlatoRepository;
 import jakarta.transaction.Transactional;
 
@@ -16,6 +18,9 @@ public class PlatoService {
     @Autowired
     private PlatoRepository platoRepo;
     
+    @Autowired
+    private PedidoRepository pedidoRepo;
+
     public List<Plato> obtenerPlatos() {
         return  platoRepo.findAll();
     }
@@ -46,5 +51,8 @@ public class PlatoService {
         return null;
     }
 
+public Pedido guardarPedido(Pedido pedido) {
+        return pedidoRepo.save(pedido);
+    }
 
 }

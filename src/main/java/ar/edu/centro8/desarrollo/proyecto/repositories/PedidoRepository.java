@@ -6,4 +6,5 @@ import ar.edu.centro8.desarrollo.proyecto.models.Pedido;
 
 public interface PedidoRepository extends JpaRepository <Pedido, Long>{
 
+
 }

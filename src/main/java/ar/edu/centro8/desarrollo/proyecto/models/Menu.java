@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,7 +23,7 @@ import lombok.Setter;
 @Table(name="menu")
 @NoArgsConstructor
 public class Menu {
-@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_menu", nullable = false)
     private Long id;
@@ -51,6 +52,7 @@ public class Menu {
     private List<Plato> platos;
 
 
+
     public Menu(String nombre, String descripcion, Double precio, int cantidad, String categoria, String imagenUrl,
             List<Plato> platos) {
         this.nombre = nombre;
@@ -62,19 +64,11 @@ public class Menu {
         this.platos = platos;
     }
 
-
-
-
-
     //AGREGADO
     public Plato agregarPlato(Plato plato) {
         this.platos.add(plato);
         return plato;
     }
-
-
-
-
 
     @Override
     public int hashCode() {
@@ -90,10 +84,6 @@ public class Menu {
         result = prime * result + ((platos == null) ? 0 : platos.hashCode());
         return result;
     }
-
-
-
-
 
     @Override
     public boolean equals(Object obj) {
@@ -143,11 +133,6 @@ public class Menu {
             return false;
         return true;
     }
-
-
-
-    
-    
+ 
 
 }
-
