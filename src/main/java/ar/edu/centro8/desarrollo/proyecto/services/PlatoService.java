@@ -16,22 +16,22 @@ import jakarta.transaction.Transactional;
 public class PlatoService {
 
     @Autowired
-    private PlatoRepository platoRepo;
+    private PlatoRepository plaRepo;
     
     @Autowired
-    private PedidoRepository pedidoRepo;
+    private PedidoRepository peRepo;
 
     public List<Plato> obtenerPlatos() {
-        return  platoRepo.findAll();
+        return  plaRepo.findAll();
     }
 
     public Plato guardarPlato(Plato plato) {
-        return platoRepo.save(plato);
+        return plaRepo.save(plato);
     }
 
     public boolean eliminarPlato(Long id) {
         try {
-            platoRepo.deleteById(id);
+            plaRepo.deleteById(id);
             return true;
         } catch (Exception e) {
             return false;
@@ -39,7 +39,7 @@ public class PlatoService {
     }
 
     public Plato traerPlato(Long id) {
-        return platoRepo.findById(id).orElse(null);
+        return plaRepo.findById(id).orElse(null);
     }
 
     public Plato editarPlato(Long id, int nuevaCantidad) {
@@ -52,7 +52,7 @@ public class PlatoService {
     }
 
 public Pedido guardarPedido(Pedido pedido) {
-        return pedidoRepo.save(pedido);
+        return peRepo.save(pedido);
     }
 
 }

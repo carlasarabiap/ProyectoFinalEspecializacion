@@ -16,23 +16,23 @@ import jakarta.transaction.Transactional;
 public class MenuService {
 
     @Autowired
-    private MenuRepository menuRepository;
+    private MenuRepository meRepository;
     
     @Autowired
-    private PlatoRepository platoRepository;
+    private PlatoRepository plaRepository;
     
         
     public List<Menu> obtenerMenu() {
-        return menuRepository.findAll();
+        return meRepository.findAll();
     }
     
     public Menu guardarMenu(Menu menu) {
-        return menuRepository.save(menu);
+        return meRepository.save(menu);
     }
-    
+
     public boolean eliminarMenu(Long id) {
         try {
-            menuRepository.deleteById(id);
+            meRepository.deleteById(id);
             return true;
         } catch (Exception e) {
             return false;
@@ -40,7 +40,7 @@ public class MenuService {
     }
     
     public Menu traerMenu(Long id) {
-        return menuRepository.findById(id).orElse(null);
+        return meRepository.findById(id).orElse(null);
     }
     
     public Menu editarMenu(Long id, String nuevoNombre, String nuevaDescripcion, Double nuevoPrecio, int nuevaCantidad, String nuevaCategoria, String nuevaImagenUrl) {
@@ -59,8 +59,8 @@ public class MenuService {
     }
     
         public Plato guardarPlato(Plato plato) {
-            return platoRepository.save(plato);
+            return plaRepository.save(plato);
         }
     
-        
+       
     }

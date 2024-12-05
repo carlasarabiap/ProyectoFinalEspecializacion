@@ -3,6 +3,7 @@ package ar.edu.centro8.desarrollo.proyecto.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ar.edu.centro8.desarrollo.proyecto.DTO.CrearPedidoRequest;
 import ar.edu.centro8.desarrollo.proyecto.models.Pedido;
 import ar.edu.centro8.desarrollo.proyecto.services.PedidoService;
 
@@ -20,35 +22,41 @@ import ar.edu.centro8.desarrollo.proyecto.services.PedidoService;
 public class PedidoController {
 
     @Autowired
-    private PedidoService pediServi;
-    
-        @GetMapping
-        public List<Pedido> getAllPedidos() {
-            return pediServi.obtenerPedidos();
-        }
-    
-        @GetMapping("/{id}")
-        public Pedido getPedidoById(@PathVariable Long id) {
-            return pediServi.traerPedido(id);
-        }
+    private PedidoService pedidoService;
 
-        @PostMapping("/clientes/{id_cliente}")
-        public ResponseEntity<String> createPedido(@PathVariable Long id_cliente, @RequestBody Pedido pedido) {
-            try {
-                pediServi.guardarPedido(id_cliente, pedido);
-                return ResponseEntity.status(201).body("Pedido creado exitosamente");
-            } catch (Exception e) {
-                return ResponseEntity.status(400).body("Error al crear el pedido: " + e.getMessage());
-            }
+    @GetMapping
+    public List<Pedido> getAllPedidos() {
+        return pedidoService.obtenerPedidos();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Pedido> getPedidoById(@PathVariable Long id) {
+        Pedido pedido = pedidoService.traerPedido(id);
+        if (pedido != null) {
+            return ResponseEntity.ok(pedido);
         }
-    
-        // @PutMapping("/{id}")
-        // public void updatePedido(@PathVariable Long id, @RequestBody Pedido pedido) {
-        //      pediServi.editarPedido(id, pedido.getCantidad(), pedido.getEstado(), pedido.getNotas());
-        // }
-    
-        @DeleteMapping("/{id}")
-        public void deletePedido(@PathVariable Long id) {
-            pediServi.eliminarPedido(id);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @PostMapping("/clientes/{id_cliente}")
+    public ResponseEntity<?> createPedido(
+            @PathVariable("id_cliente") Long idCliente,
+            @RequestBody CrearPedidoRequest request) {
+        try {
+            Pedido nuevoPedido = new Pedido();
+            nuevoPedido.setNotas(request.getNotas());
+            Pedido pedidoCreado = pedidoService.crearPedido(idCliente, nuevoPedido, request.getMenuIdsConCantidades());
+            return ResponseEntity.status(HttpStatus.CREATED).body(pedidoCreado);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al crear el pedido: " + e.getMessage());
         }
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletePedido(@PathVariable Long id) {
+        if (pedidoService.eliminarPedido(id)) {
+            return ResponseEntity.ok("Pedido eliminado exitosamente");
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pedido no encontrado");
+    }
+}

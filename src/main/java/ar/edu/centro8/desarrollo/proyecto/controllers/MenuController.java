@@ -35,13 +35,13 @@ public class MenuController {
         }
     
         @PostMapping
-        public void createMenu(@RequestBody Menu menu) {
-            meServi.guardarMenu(menu);
+        public void createMenu(@RequestBody Menu m) {
+            meServi.guardarMenu(m);
         }
     
         @PutMapping("/{id}")
-        public void updateMenu(@PathVariable Long id, @RequestBody Menu menu) {
-             meServi.editarMenu(id,menu.getNombre(), menu.getDescripcion(), menu.getPrecio(), menu.getCantidad(), menu.getCategoria(), menu.getImagenUrl());
+        public void updateMenu(@PathVariable Long id, @RequestBody Menu m) {
+             meServi.editarMenu(id,m.getNombre(), m.getDescripcion(), m.getPrecio(), m.getCantidad(), m.getCategoria(), m.getImagenUrl());
         }
     
         @DeleteMapping("/{id}")

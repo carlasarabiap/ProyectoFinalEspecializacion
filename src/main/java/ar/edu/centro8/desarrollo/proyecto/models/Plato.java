@@ -1,5 +1,6 @@
 package ar.edu.centro8.desarrollo.proyecto.models;
 
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
@@ -27,26 +28,30 @@ public class Plato {
     @Column(name="cantidad", nullable = false)
     private int cantidad;
 
-    
     //RELACION PLATO - MENU
     @ManyToOne
-    @JsonBackReference
+    // @JsonBackReference
     @JoinColumn(name = "id_menu", nullable = false)
     private Menu menu;
 
     //RELACION PLATO - PEDIDO
     @ManyToOne
     @JsonBackReference
-    @JoinColumn(name = "id_pedido", nullable = false)
+    @JoinColumn(name = "id_pedido", referencedColumnName = "id_pedido", nullable = false)
     private Pedido pedido;
 
-    
+    // public Plato(int cantidad, Menu menu, Pedido pedido) {
+    //     this.cantidad = cantidad;
+    //     this.menu = menu;
+    //     this.pedido = pedido;
+    // }
 
-    public Plato(int cantidad, Menu menu, Pedido pedido) {
+    public Plato(int cantidad, Menu menu) {
         this.cantidad = cantidad;
         this.menu = menu;
-        this.pedido = pedido;
     }
+    
+
     //AGREGADO 
     //PLATO-MENU
     public void setMenu(Menu menu) {
@@ -56,46 +61,5 @@ public class Plato {
     public void setPedido(Pedido pedido) {
         this.pedido = pedido;
     }
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + cantidad;
-        result = prime * result + ((menu == null) ? 0 : menu.hashCode());
-        result = prime * result + ((pedido == null) ? 0 : pedido.hashCode());
-        return result;
-    }
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Plato other = (Plato) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        if (cantidad != other.cantidad)
-            return false;
-        if (menu == null) {
-            if (other.menu != null)
-                return false;
-        } else if (!menu.equals(other.menu))
-            return false;
-        if (pedido == null) {
-            if (other.pedido != null)
-                return false;
-        } else if (!pedido.equals(other.pedido))
-            return false;
-        return true;
-    }
-
-   
-       
-
+    
 }

@@ -20,7 +20,6 @@ public class ClienteService {
         @Autowired
         private PedidoRepository pedidoRepository;
     
-        
         public List<Cliente> obtenerClientes() {
             return clienteRepository.findAll();
         }

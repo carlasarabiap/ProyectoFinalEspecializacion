@@ -1,8 +1,9 @@
 package ar.edu.centro8.desarrollo.proyecto.models;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -13,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
@@ -22,15 +24,15 @@ import lombok.Setter;
 
 @Entity
 @Getter @Setter
-@Table(name="pedidos")
+@Table(name = "pedidos")
 @NoArgsConstructor
 public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id_pedido", nullable = false)
+    @Column(name = "id_pedido", nullable = false)
     private Long id;
 
-    @Column(name="fecha", nullable = false)
+    @Column(name = "fecha", nullable = false)
     private LocalDateTime fecha;
 
     @PrePersist
@@ -38,52 +40,56 @@ public class Pedido {
         this.fecha = LocalDateTime.now();
     }
 
-    @Column(name="cantidad", nullable = false)
-    private int cantidad;
-
-    @Column(name="estado", nullable = false)
-    private String estado;
-
-    @Column(name="notas", nullable = true)
+    @Column(name = "notas", nullable = true)
     private String notas;
 
-    //RELACION PEDIDO - CLIENTE
+    // RELACIÓN PEDIDO - CLIENTE
     @ManyToOne
-    @JsonBackReference
+    // @JsonBackReference // Evitar referencia cíclica al serializar
     @JoinColumn(name = "id_cliente", referencedColumnName = "id_cliente", nullable = false)
     private Cliente cliente;
 
-    //RELACION PEDIDO - FACTURA (BIDIRECCIONAL FK - PK)
+    // RELACIÓN PEDIDO - FACTURA (Bidireccional FK - PK)
     @OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)
     @JsonManagedReference // Lado gestionado de la relación
     private Factura factura;
 
+    // RELACIÓN PEDIDO - PLATO
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Plato> platos = new ArrayList<>();
 
-    public Pedido(Long id, LocalDateTime fecha, int cantidad, String estado, String notas, Cliente cliente, Factura factura) {
-        this.id = id;
+    // Constructor con parámetros
+    public Pedido(LocalDateTime fecha, String notas, Cliente cliente, List<Plato> platos) {
         this.fecha = fecha;
-        this.cantidad = cantidad;
-        this.estado = estado;
         this.notas = notas;
         this.cliente = cliente;
-        this.factura = factura;
+        this.platos = platos;
     }
 
-    //AGREGADO 
-    //PEDIDO-CLIENTE
+    // Métodos auxiliares para gestionar platos
+    public void agregarPlato(Plato plato) {
+        this.platos.add(plato);
+        plato.setPedido(this);
+    }
+
+    public void removerPlato(Plato plato) {
+        this.platos.remove(plato);
+        plato.setPedido(null);
+    }
+
+    // Agregado: Asociar cliente
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
 
-
+    // Métodos equals y hashCode generados automáticamente
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
-        result = prime * result + cantidad;
-        result = prime * result + ((estado == null) ? 0 : estado.hashCode());
         result = prime * result + ((notas == null) ? 0 : notas.hashCode());
         result = prime * result + ((cliente == null) ? 0 : cliente.hashCode());
         result = prime * result + ((factura == null) ? 0 : factura.hashCode());
@@ -109,13 +115,6 @@ public class Pedido {
                 return false;
         } else if (!fecha.equals(other.fecha))
             return false;
-        if (cantidad != other.cantidad)
-            return false;
-        if (estado == null) {
-            if (other.estado != null)
-                return false;
-        } else if (!estado.equals(other.estado))
-            return false;
         if (notas == null) {
             if (other.notas != null)
                 return false;
@@ -133,5 +132,4 @@ public class Pedido {
             return false;
         return true;
     }
-       
 }

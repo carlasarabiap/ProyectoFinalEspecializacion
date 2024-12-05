@@ -39,7 +39,7 @@ public class Factura {
     @Column(name="total", nullable = false)
     private Double total;
 
-    @Column(name="estado", nullable = false)
+    @Column(name="estado", nullable = true)
     private String estado;
 
     //RELACION FACTURA - PEDIDO
