@@ -40,18 +40,11 @@ public class Plato {
     @JoinColumn(name = "id_pedido", referencedColumnName = "id_pedido", nullable = false)
     private Pedido pedido;
 
-    // public Plato(int cantidad, Menu menu, Pedido pedido) {
-    //     this.cantidad = cantidad;
-    //     this.menu = menu;
-    //     this.pedido = pedido;
-    // }
-
     public Plato(int cantidad, Menu menu) {
         this.cantidad = cantidad;
         this.menu = menu;
     }
     
-
     //AGREGADO 
     //PLATO-MENU
     public void setMenu(Menu menu) {
