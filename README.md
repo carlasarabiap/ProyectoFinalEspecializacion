@@ -9,7 +9,7 @@
 
 ## 1. Comemos en Casa
 
-Comemos en Casa es una herramienta que te permitirá cliente, encontrar los mejores platos de comida con sabor a casa a un precio extraordinario y con la mejor calidad.
+Comemos en Casa es una herramienta que le permitirá al cliente, encontrar los mejores platos de comida con sabor a casa a un precio extraordinario y con la mejor calidad.
 
 ## 2. Tecnologías utilizadas
 
@@ -39,8 +39,7 @@ MySQL es un sistema de gestión de bases de datos relacional (RDBMS) de código 
 
 
 
-# Como en Casa
+# Comemos en Casa
 # Betty Calatayud - FrontEnd - APIS Externas
 # Carla Sarabia - BackEnd - FullStack
 
-# https://
