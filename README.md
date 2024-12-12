@@ -9,7 +9,7 @@
 
 ## 1. Comemos en Casa
 
-Como en Sasa es una herramienta que te permitirá cliente, encontrar los mejores platos de comida con sabor a casa a un precio extraordinario y con la mejor calidad.
+Comemos en Casa es una herramienta que te permitirá cliente, encontrar los mejores platos de comida con sabor a casa a un precio extraordinario y con la mejor calidad.
 
 ## 2. Tecnologías utilizadas
 
