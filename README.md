@@ -3,11 +3,11 @@
 
 ## Índice
 
-- [1. Como en Casa](#1-como-en-casa)
+- [1. Comemos en Casa](#1-comemos-en-casa)
 - [2. Tecnologías utilizadas](#3-tecnologías-utilizadas)
 - [3. Consideraciones generales](#4-consideraciones-generales)
 
-## 1. Como en Casa
+## 1. Comemos en Casa
 
 Como en Sasa es una herramienta que te permitirá cliente, encontrar los mejores platos de comida con sabor a casa a un precio extraordinario y con la mejor calidad.
 
