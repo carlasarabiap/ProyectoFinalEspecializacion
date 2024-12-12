@@ -40,7 +40,7 @@ MySQL es un sistema de gestión de bases de datos relacional (RDBMS) de código 
 
 
 # Como en Casa
-# Betty Calatayud - FrontEnd
+# Betty Calatayud - FrontEnd - APIS Externas
 # Carla Sarabia - BackEnd - FullStack
 
 # https://
