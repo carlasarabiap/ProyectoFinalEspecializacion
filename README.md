@@ -1,5 +1,5 @@
 # PROYECTO WEB proyectoFinal
-# Como en Casa
+# Comemos en Casa
 
 ## Índice
 
